@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="city">
+    <button onclick="getweather()">GET INFO</button>
+
+    <div id="container"></div>
+
+    <div>
+        <div class="mapouter"><div class="gmap_canvas"><iframe width="600" height="500" id="gmap_canvas"  frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://fmovies-online.net"></a><br><style>.mapouter{position:relative;text-align:right;height:500px;width:600px;}</style><a href="https://www.embedgooglemap.net">google maps iframe embed</a><style>.gmap_canvas {overflow:hidden;background:none!important;height:500px;width:600px;}</style></div></div>
+    </div>
+</body>
+</html>
+<script>
+    
+
+    //url - https://api.openweathermap.org/data/2.5/weather?q=Ramgarh&appid=7bfccd96cb0fbbf8dbb2c1151dbfb6c0&units=metric
+
+    async function getweather(){
+        try{
+            let city = document.getElementById("city").value;
+
+            let res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=7bfccd96cb0fbbf8dbb2c1151dbfb6c0&units=metric`);
+
+            let data = await res.json();
+            appendData(data)
+            console.log('data:', data)
+        }
+        catch(error){
+            console.log('error:', error)
+        }
+    }
+
+    function appendData(data){
+
+        let map = document.getElementById("gmap_canvas")
+        container.innerHTML = null;
+
+        let name = document.createElement("h3");
+        name.innerText = `Name:${data.name}`;
+
+        let min_temp = document.createElement("h3");
+        min_temp.innerText = `Min_Temp:${data.main.temp_min}`;
+
+        let max_temp = document.createElement("h3");
+        max_temp.innerText = `Max_Temp:${data.main.temp_max}`;
+
+        let wind = document.createElement("h3");
+        wind.innerText = `Wind Speed:${data.wind.speed}`;
+
+        let clouds = document.createElement("h3");
+        clouds.innerText = `Clouds:${data.clouds.all}`;
+
+        let sunrise = document.createElement("h3");
+        sunrise.innerText = `Sunrise:${data.sys.sunrise}`;
+
+        let sunset = document.createElement("h3");
+        sunset.innerText = `Sunset:${data.sys.sunset}`
+
+        container.append(name , min_temp, max_temp, wind,clouds,sunrise,sunset)
+        map.src=`https://maps.google.com/maps?q=${data.name}&t=&z=13&ie=UTF8&iwloc=&output=embed`
+    }
+</script>
